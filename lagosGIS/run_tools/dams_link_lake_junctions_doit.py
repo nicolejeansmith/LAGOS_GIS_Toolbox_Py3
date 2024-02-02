@@ -68,8 +68,8 @@ with arcpy.da.UpdateCursor(pivot_id, '*') as cursor:
     for row in cursor:
         damid, lagos1, lagos2, lagos3, dist1, dist2, dist3, fc1, fc2, fc3, lagoslakeid, amb_dir, amb_lake, dam_link = row[1:]
 
-        amb_dir = 'Y' if ((dist2-dist1 < 100 and dist1 > 25) or dist2-dist1 < 50) and fc1 <> fc2 else 'N'
-        amb_lake = 'Y' if ((dist2-dist1 < 100 and dist1 > 25) or dist2-dist1 < 50) and lagos1 <> lagos2 else 'N'
+        amb_dir = 'Y' if ((dist2-dist1 < 100 and dist1 > 25) or dist2-dist1 < 50) and fc1 != fc2 else 'N'
+        amb_lake = 'Y' if ((dist2-dist1 < 100 and dist1 > 25) or dist2-dist1 < 50) and lagos1 != lagos2 else 'N'
 
         if dist1 < 250 and amb_dir == 'N' and amb_lake == 'N':
             if fc1 == inlets_name:

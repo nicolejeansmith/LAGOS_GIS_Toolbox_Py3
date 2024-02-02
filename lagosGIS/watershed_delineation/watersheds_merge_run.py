@@ -46,7 +46,7 @@ def merge_watersheds(parent_directory, output_fc, tag):
 
     elif tag == 'catchment':
         for fc in merge_fcs:
-            print fc
+            print(fc)
         output_fc = lagosGIS.efficient_merge(merge_fcs, output_fc, 'lagoslakeid IS NOT NULL')
 
     return output_fc
@@ -141,7 +141,7 @@ ws_dict = {r[0]:r[1] for r in arcpy.da.SearchCursor(output_ws, ['lagoslakeid', '
 with arcpy.da.UpdateCursor(output_nws, ['lagoslakeid', 'VPUID']) as cursor:
     for row in cursor:
         # if the VPUID isn't the same as in the de-duplicated WS layer, delete the row
-        if row[1] <> ws_dict[row[0]]:
+        if row[1] != ws_dict[row[0]]:
             print("Deleting VPUID {} for lagoslakeid {}".format(row[1], row[0]))
             cursor.deleteRow()
 

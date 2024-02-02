@@ -29,33 +29,33 @@ __all__ = ["lake_connectivity_classification",
 import os
 import arcpy
 import tempfile
-from lake_connectivity_classification import classify as lake_connectivity_classification
-from upstream_lakes import count as upstream_lakes
-from locate_lake_outlets import locate_lake_outlets
-from locate_lake_inlets import locate_lake_inlets
-from watershed_delineation.aggregate_watersheds import aggregate_watersheds as aggregate_watersheds
-from watershed_delineation.postprocess_watersheds import calc_watershed_subtype
-from watershed_delineation.postprocess_watersheds import calc_watershed_equality
+from .lake_connectivity_classification import classify as lake_connectivity_classification
+from .upstream_lakes import count as upstream_lakes
+from .locate_lake_outlets import locate_lake_outlets
+from .locate_lake_inlets import locate_lake_inlets
+from .watershed_delineation.aggregate_watersheds import aggregate_watersheds as aggregate_watersheds
+from .watershed_delineation.postprocess_watersheds import calc_watershed_subtype
+from .watershed_delineation.postprocess_watersheds import calc_watershed_equality
 
-from point_density_in_zones import calc as point_density_in_zones
-from line_density_in_zones import calc as line_density_in_zones
-from polygon_density_in_zones import calc as polygon_density_in_zones
-from stream_density import calc_all as stream_density
-from lake_density import calc_all as lake_density
+from .point_density_in_zones import calc as point_density_in_zones
+from .line_density_in_zones import calc as line_density_in_zones
+from .polygon_density_in_zones import calc as polygon_density_in_zones
+from .stream_density import calc_all as stream_density
+from .lake_density import calc_all as lake_density
 
-from flatten_overlapping_zones import flatten as flatten_overlaps
-from rasterize_zones import rasterize as rasterize_zones
-from zonal_summary_of_raster_data import calc as zonal_summary_of_raster_data
-from preprocess_padus import preprocess as preprocess_padus
+from .flatten_overlapping_zones import flatten as flatten_overlaps
+from .rasterize_zones import rasterize as rasterize_zones
+from .zonal_summary_of_raster_data import calc as zonal_summary_of_raster_data
+from .preprocess_padus import preprocess as preprocess_padus
 
-from zonal_summary_of_classed_polygons import summarize as zonal_summary_of_classed_polygons
-from point_attribution_of_raster_data import attribution as point_attribution_of_raster_data
+from .zonal_summary_of_classed_polygons import summarize as zonal_summary_of_classed_polygons
+from .point_attribution_of_raster_data import attribution as point_attribution_of_raster_data
 
-from georeference import spatialize_sites
-from georeference import georeference_lake_sites
+from .georeference import spatialize_sites
+from .georeference import georeference_lake_sites
 
-from export_to_csv import export as export_to_csv
-import spatial_divisions_processing
+from .export_to_csv import export as export_to_csv
+from . import spatial_divisions_processing
 
 
 LAGOS_FCODE_LIST = (39000,39004,39009,39010,39011,39012,43600,43613,43615,43617,43618,43619,43621)
@@ -79,7 +79,7 @@ def efficient_merge(feature_class_or_table_list, output_fc, filter =''):
 
     # This is a fast and stable merge method for this number of features compared to arcpy Merge
     if all_exist_test:
-        print("Beginning merge of {} feature classes, copying first feature class {} to output...".format(fc_count, first_fc))
+        print(("Beginning merge of {} feature classes, copying first feature class {} to output...".format(fc_count, first_fc)))
         if description.dataType == "FeatureClass":
             arcpy.Select_analysis(first_fc, output_fc, filter)
         else:
@@ -99,8 +99,8 @@ def efficient_merge(feature_class_or_table_list, output_fc, filter =''):
             try:
                 del searchRow, searchRows
             except:
-                print("Merged NO features from {}; filter eliminated all features".format(fc))
-            print("Merged {0} features from {1}".format(counter, fc))
+                print(("Merged NO features from {}; filter eliminated all features".format(fc)))
+            print(("Merged {0} features from {1}".format(counter, fc)))
         del insertRows
         arcpy.SetLogHistory = True
 
@@ -126,7 +126,7 @@ def list_shared_words(string1, string2, exclude_lake_words = True ):
     :return: A list of words.
     """
     EXCLUSION_SET = set(['LAKE', 'POND', 'RESERVOIR', 'DAM'])
-    if not (isinstance(string1, basestring) and isinstance(string2, basestring)):
+    if not (isinstance(string1, str) and isinstance(string2, str)):
         raise TypeError("inputs must each be a string")
 
     words1 = set(string1.upper().split())

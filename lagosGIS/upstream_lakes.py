@@ -7,7 +7,7 @@
 import os
 import arcpy
 
-import NHDNetwork
+from . import NHDNetwork
 
 
 def count(nhd_gdb, output_table):
@@ -47,9 +47,9 @@ def count(nhd_gdb, output_table):
     for wb_id in waterbody_ids:
         uplakes = nhd_network.find_upstream_lakes(wb_id, 'list', area_threshold=0.01)
         uplakes_areas = [nhd_network.lakes_areas[id] for id in uplakes]
-        uplakes_1ha = filter(lambda a: a >= 0.01, uplakes_areas)
-        uplakes_4ha = filter(lambda a: a >= 0.04, uplakes_areas)
-        uplakes_10ha = filter(lambda a: a >= 0.1, uplakes_areas)
+        uplakes_1ha = [a for a in uplakes_areas if a >= 0.01]
+        uplakes_4ha = [a for a in uplakes_areas if a >= 0.04]
+        uplakes_10ha = [a for a in uplakes_areas if a >= 0.1]
         count_1ha = len(uplakes_1ha)
         area_1ha = sum(uplakes_1ha) * 100 # convert to hectares
         count_4ha = len(uplakes_4ha)

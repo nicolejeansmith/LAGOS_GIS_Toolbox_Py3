@@ -89,7 +89,7 @@ def preprocess(padus_combined_fc, output_fc):
 
             # Set merge flag to 'Y' if any output field contains a value that had to be resolved among multiple
             # original polygons
-            if fc1 <> fc2 or own1 <> own2 or gap1 <> gap2 or iucn1 <> iucn2:
+            if fc1 != fc2 or own1 != own2 or gap1 != gap2 or iucn1 != iucn2:
                 flag = 'Y'
 
             areacalc = areashp

@@ -5,7 +5,7 @@
 # tool type: re-usable (ArcGIS Toolbox)
 
 import arcpy
-import nhd_plus_watersheds_tools as npwt
+from . import nhd_plus_watersheds_tools as npwt
 
 nhdplus_gdb = arcpy.GetParameterAsText(0)
 output_table = arcpy.GetParameterAsText(1)

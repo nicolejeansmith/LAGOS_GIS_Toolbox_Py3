@@ -59,7 +59,7 @@ def find_states(zones_fc, state_fc, zone_name=''):
         DM.DeleteField(zones_fc, states_field)
 
     # Make a field mapping that gathers all the intersecting states into one new value separated by space
-    field_list = [f.name for f in arcpy.ListFields(zones_fc) if f.type <> 'OID' and f.type <> 'Geometry']
+    field_list = [f.name for f in arcpy.ListFields(zones_fc) if f.type != 'OID' and f.type != 'Geometry']
     field_mapping = arcpy.FieldMappings()
     for f in field_list:
         map = arcpy.FieldMap()

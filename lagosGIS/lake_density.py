@@ -6,7 +6,7 @@
 
 import os
 import arcpy
-import polygon_density_in_zones
+from . import polygon_density_in_zones
 import lagosGIS
 
 

@@ -30,7 +30,7 @@ HU4 = r'D:\Continental_Limnology\Data_Working\LAGOS_US_GIS_Data_v0.8.gdb\Spatial
 
 # straight as downloaded from web in mid-March 2019
 NHDPLUS_ZIPPED_DIR = 'F:\Continental_Limnology\Data_Downloaded\NHDPlus_High_Resolution_COMPLETE\Zipped'
-NHDPLUS_UNZIPPED_DIR = 'F:\Continental_Limnology\Data_Downloaded\NHDPlus_High_Resolution_COMPLETE\Unzipped_Original'
+NHDPLUS_UNZIPPED_DIR = 'F:\Continental_Limnology\Data_Downloaded\NHDPlus_High_Resolution_COMPLETE\\Unzipped_Original'
 NHD_UNZIPPED_DIR = '' # not using any of these this time, keeping option available in code below
 # a directory wherever you want to store the outputs
 # each subregion will have its own geodatabase created and saved

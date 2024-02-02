@@ -5,7 +5,7 @@
 # tool type: re-usable (ArcGIS Toolbox)
 
 import arcpy
-import nhd_plus_watersheds_tools as npwt
+from . import nhd_plus_watersheds_tools as npwt
 
 burned_raster = arcpy.GetParameterAsText(0)
 filled_raster_output = arcpy.GetParameterAsText(1)

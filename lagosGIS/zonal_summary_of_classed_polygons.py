@@ -74,7 +74,7 @@ def summarize(zone_fc, zone_field, class_fc, out_table, class_field, rename_tag=
 
     # Refine output table to ensure output row for every input row and enforce maximum value of 100%
     all_zones = lagosGIS.one_in_one_out(renamed, zone_fc, zone_field, 'all_zones')
-    new_fields = [f.name for f in arcpy.ListFields(all_zones) if f.name <> zone_field and f.type not in ('OID', 'Geometry')]
+    new_fields = [f.name for f in arcpy.ListFields(all_zones) if f.name != zone_field and f.type not in ('OID', 'Geometry')]
     with arcpy.da.UpdateCursor(all_zones, new_fields) as cursor:
         for row in cursor:
             row = [min(val, 100) if val else 0 for val in row]

@@ -6,7 +6,7 @@
 
 import arcpy
 
-import NHDNetwork
+from . import NHDNetwork
 import lagosGIS
 
 # this tool has a companion with symmetrical code: locate_lake_outlets.

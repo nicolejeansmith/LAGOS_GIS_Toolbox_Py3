@@ -6,7 +6,7 @@
 
 import os
 import arcpy
-import NHDNetwork
+from . import NHDNetwork
 
 
 def classify(nhd_gdb, output_table):
@@ -38,7 +38,7 @@ def classify(nhd_gdb, output_table):
     """
     nhd_network = NHDNetwork.NHDNetwork(nhd_gdb)
     nhd_network.define_lakes(strict_minsize=False, force_lagos=True)
-    waterbody_ids = nhd_network.lakes_areas.keys()
+    waterbody_ids = list(nhd_network.lakes_areas.keys())
     nhd_network.define_lakes(strict_minsize=False, force_lagos=False)
 
     arcpy.AddMessage("Calculating all connectivity...")

@@ -43,7 +43,7 @@ for gdb in gdb_list:
 arcpy.env.workspace = OUTPUT_GDB
 for region in regions:
     wildcard = 'streams_{}*'.format(region)
-    print wildcard
+    print(wildcard)
     fcs = arcpy.ListFeatureClasses(wildcard)
     print(fcs)
     streams_all = 'streams_all_{}'.format(region)

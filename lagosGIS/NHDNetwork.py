@@ -167,7 +167,7 @@ class NHDNetwork:
         """
         self.waterbody_nhdpid = {r[0]: r[1]
                                  for r in arcpy.da.SearchCursor(self.waterbody, ['Permanent_Identifier', 'NHDPlusID'])}
-        self.nhdpid_waterbody = {v: k for k, v in self.waterbody_nhdpid.items()}
+        self.nhdpid_waterbody = {v: k for k, v in list(self.waterbody_nhdpid.items())}
 
     def drop_intermittent_flow(self):
         """
@@ -299,7 +299,7 @@ class NHDNetwork:
         if not self.lakes_areas:
             self.define_lakes()
 
-        self.waterbody_stop_ids = [id for id, area in self.lakes_areas.items() if area >= 0.1]
+        self.waterbody_stop_ids = [id for id, area in list(self.lakes_areas.items()) if area >= 0.1]
         # and set the flowlines too
         self.set_stop_ids(self.waterbody_stop_ids)
         # and save stable for re-use by network class
@@ -592,12 +592,12 @@ class NHDNetwork:
         erasable_dict = dict()
 
         # traces for each lake in results as sets
-        print("Tracing networks for {} focal lakes...".format(len(focal_lakes)))
+        print(("Tracing networks for {} focal lakes...".format(len(focal_lakes))))
         self.deactivate_stops()
-        lake_upstream_traces = {k:set(v) for k, v in self.trace_up_from_waterbody_starts().items()}
+        lake_upstream_traces = {k:set(v) for k, v in list(self.trace_up_from_waterbody_starts().items())}
         lake_downstream_traces = {k:set(self.trace_down_from_a_waterbody(k)) for k in focal_lakes}
         self.activate_10ha_lake_stops()
-        lake_interlake_traces = {k:set(v) for k, v in self.trace_up_from_waterbody_starts().items()}
+        lake_interlake_traces = {k:set(v) for k, v in list(self.trace_up_from_waterbody_starts().items())}
         self.deactivate_stops()
 
         # get conn class for tenha lakes
@@ -606,14 +606,14 @@ class NHDNetwork:
 
         # get networks for tenha lakes as sets, both NHDFlowline and NHDWaterbody ids will be included
         self.set_start_ids(self.tenha_waterbody_ids)
-        tenha_nets_full = {k:set(v) for k, v in self.trace_up_from_waterbody_starts().items()}
+        tenha_nets_full = {k:set(v) for k, v in list(self.trace_up_from_waterbody_starts().items())}
 
-        tenha_isolated = {k:v for k, v in tenha_nets_full.items() if tenha_conn[k] == 'Isolated'}
-        tenha_terminal_entire = {k:v for k, v in tenha_nets_full.items() if tenha_conn[k] in ('Terminal', 'TerminalLk')}
+        tenha_isolated = {k:v for k, v in list(tenha_nets_full.items()) if tenha_conn[k] == 'Isolated'}
+        tenha_terminal_entire = {k:v for k, v in list(tenha_nets_full.items()) if tenha_conn[k] in ('Terminal', 'TerminalLk')}
         # only portions of terminal networks that are off the main network will be erasable
         on_network = set(self.trace_up_from_hu4_outlets())
-        tenha_terminal = {k:v.difference(on_network) for k, v in tenha_terminal_entire.items()}
-        tenha_drainage = {k:v for k, v in tenha_nets_full.items()
+        tenha_terminal = {k:v.difference(on_network) for k, v in list(tenha_terminal_entire.items())}
+        tenha_drainage = {k:v for k, v in list(tenha_nets_full.items())
                           if tenha_conn[k] in ('Headwater', 'Drainage', 'DrainageLk')}
 
         # all lakes will get isolated added. Use keys because traces are emtpy for Isolated
@@ -634,22 +634,22 @@ class NHDNetwork:
 
             else:
                 # get qualifying terminal lakes, those not downstream of focal lake
-                terminal_tenha_eligible= {k:v for k, v in tenha_terminal.items() if k not in focal_downstream}
+                terminal_tenha_eligible= {k:v for k, v in list(tenha_terminal.items()) if k not in focal_downstream}
                 # get qualifying drainage lakes, those with outlet of network is upstream of focal_lake
-                tenha_drainage_eligible = {k:v for k, v in tenha_drainage.items() if k in focal_upstream}
+                tenha_drainage_eligible = {k:v for k, v in list(tenha_drainage.items()) if k in focal_upstream}
 
                 # now that we screened for eligibility, merge dicts and treat the same in the upcoming tests
                 other_tenha_eligible = terminal_tenha_eligible
                 other_tenha_eligible.update(tenha_drainage_eligible)
 
                 # test for complete or partial erasure per D and E in docstring
-                full_erasable = {k:v for k, v in other_tenha_eligible.items() if v.isdisjoint(focal_interlake)}
+                full_erasable = {k:v for k, v in list(other_tenha_eligible.items()) if v.isdisjoint(focal_interlake)}
                 partial_erasable = {k:v.difference(focal_interlake)
-                                    for k, v in other_tenha_eligible.items() if v.intersection(focal_interlake)}
+                                    for k, v in list(other_tenha_eligible.items()) if v.intersection(focal_interlake)}
 
                 # convert to flat sets
-                full_erasable_segments = set([id for trace in full_erasable.values() for id in trace])
-                partial_erasable_segments = set([id for trace in partial_erasable.values() for id in trace])
+                full_erasable_segments = set([id for trace in list(full_erasable.values()) for id in trace])
+                partial_erasable_segments = set([id for trace in list(partial_erasable.values()) for id in trace])
 
                 # merge with isolated 10ha+ lakes (all included) to make final result
                 erasable = isolated_erasable_segments.union(full_erasable_segments).union(partial_erasable_segments)
@@ -697,9 +697,9 @@ class NHDNetwork:
             self.prepare_downstream()
 
         from_ids = set(self.downstream.keys()).difference({'0'})
-        to_all = {f for to_list in self.downstream.values() for f in to_list}
+        to_all = {f for to_list in list(self.downstream.values()) for f in to_list}
         upstream_outlets = list(set(from_ids).difference(set(to_all)))
-        inlets_unflat = [v for k, v in self.downstream.items() if k in upstream_outlets]
+        inlets_unflat = [v for k, v in list(self.downstream.items()) if k in upstream_outlets]
         inlets = [i for i_list in inlets_unflat for i in i_list]
         self.inlets = inlets
         return self.inlets
@@ -717,12 +717,12 @@ class NHDNetwork:
         # It is also used for flowlines ending in ocean, check for another type of outlet FIRST.
 
         to_ids = set(self.upstream.keys()).difference({'0'})
-        from_all = {f for from_list in self.upstream.values() for f in from_list}
+        from_all = {f for from_list in list(self.upstream.values()) for f in from_list}
         downstream_inlets = list(set(to_ids).difference(set(from_all)))
         # downstream_inlets are lowest flow entity, but typically the NHD includes the
         # inlet for the next subregion down in the table or '0' for the ocean, so outlets_unflat checks for the
         # flow entity(ies) just above the lowest
-        outlets_unflat = [v for k, v in self.upstream.items() if k in downstream_inlets]
+        outlets_unflat = [v for k, v in list(self.upstream.items()) if k in downstream_inlets]
         outlets = [o for o_list in outlets_unflat for o in o_list]
 
         # check that main outlet actually covers > 50% of network, otherwise try secondary
@@ -750,7 +750,7 @@ class NHDNetwork:
             else:
                 distinct_net_sizes = {id: len(self.trace_up_from_a_flowline(id)) for id in lowest_to_ids}
                 max_net_size = max(distinct_net_sizes.values())
-                outlets = [id for id, n in distinct_net_sizes.items() if n >= .5 * max_net_size]
+                outlets = [id for id, n in list(distinct_net_sizes.items()) if n >= .5 * max_net_size]
                 self.outlets_type = "secondary"
         else:
             self.outlets_type = "primary"
@@ -908,7 +908,7 @@ class NHDNetwork:
         if not self.lakes_areas:
             self.define_lakes()
 
-        countable_lakes = {id for id, area in self.lakes_areas.items() if area >= area_threshold}
+        countable_lakes = {id for id, area in list(self.lakes_areas.items()) if area >= area_threshold}
         trace_up = set(self.trace_up_from_a_waterbody(waterbody_start_id)) # includes waterbody ids
         trace_up_other = trace_up.difference({waterbody_start_id})
         upstream_lakes = countable_lakes.intersection(trace_up_other)

@@ -145,7 +145,7 @@ def aggregate_watersheds(catchments_fc, nhd_gdb, eligible_lakes_fc, output_fc,
 
             # Loop Step 5: If interlake mode, erase OTHER off-network 10ha+ lake catchments.
             # Create dissolved, hole-free subnetwork polygons before erasing.
-            if mode <> 'interlake':
+            if mode != 'interlake':
                 this_watershed = lakeless_watershed
             # Loop Step 5a: Select matching erasable regions (see NHDNetwork.define.interlake_erasable).
             else:

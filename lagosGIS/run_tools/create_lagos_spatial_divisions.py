@@ -215,7 +215,7 @@ def process_zone(zone_fc, output, zone_name, zone_id_field, zone_name_field, oth
     DM.CopyFeatures(trimmed, output)
 
     # cleanup
-    lyr_objects = [lyr_object for var_name, lyr_object in locals().items() if var_name.endswith('lyr')]
+    lyr_objects = [lyr_object for var_name, lyr_object in list(locals().items()) if var_name.endswith('lyr')]
     temp_fcs = arcpy.ListFeatureClasses('*')
     for l in lyr_objects + temp_fcs:
         DM.Delete(l)
@@ -239,7 +239,7 @@ process_zone(hu8['Original'],
 # County is included just to make it easier to reproduce and prove it's consistent with the others
 lines = [line for line in lines if line['LAGOS Zone Name'] not in ('hu8')]
 for line in lines:
-    print(line['LAGOS Zone Name'])
+    print((line['LAGOS Zone Name']))
     process_zone(line['Original'],
                  line['Output'],
                  line['LAGOS Zone Name'],
@@ -447,7 +447,7 @@ for z in zones:
         sourceid_field = arcpy.ListFields(zone_fc, col_pattern)[0].name
         name_vals = [r[0] for r in arcpy.da.SearchCursor(zone_fc, sourceid_field)]
         try:
-            print(max([len(v) for v in name_vals if v]))
+            print((max([len(v) for v in name_vals if v])))
         except:
             print("field is not character)")
-        print(any([True if not v else False for v in name_vals]))
+        print((any([True if not v else False for v in name_vals])))
