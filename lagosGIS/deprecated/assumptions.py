@@ -4,7 +4,7 @@ from arcpy import env
 import lagosGIS
 
 
-def check_unique_id(polygon_fc, candidate_id, table_workspace = 'in_memory'):
+def check_unique_id(polygon_fc, candidate_id, table_workspace = 'memory'):
     """Checks if the id you think is unique actually has no duplicates. Returns
     True if ID is unique, False if there are duplicates.
     If there are duplicates, remove them manually and use this function again
@@ -28,7 +28,7 @@ def check_unique_id(polygon_fc, candidate_id, table_workspace = 'in_memory'):
     else:
         print("Success! You can use the id %s for feature class %s" % (candidate_id, polygon_fc))
         return True
-def check_geo_overlap(polygon_fc, unique_id, table_workspace = 'in_memory', acceptable_overlap = 0):
+def check_geo_overlap(polygon_fc, unique_id, table_workspace = 'memory', acceptable_overlap = 0):
     """Prints out a list of overlapping areas between polygons, if any.
     Returns a value of true or false indicating if there were areas of concern.
 
@@ -37,7 +37,7 @@ def check_geo_overlap(polygon_fc, unique_id, table_workspace = 'in_memory', acce
     unique_id: the primary key or field that uniquely identifies this feature.
     If there is doubt about the uniqueness, use the check_unique_id function first.
 
-    table_workspace: Default is "in_memory". Choose an output geodatabase.
+    table_workspace: Default is "memory". Choose an output geodatabase.
 
     acceptable_overlap: the upper limit of the amount of overlap that can be
     considered negligible, in map units. For instance, 1 sq. m of overlap is
@@ -95,7 +95,7 @@ def remove_nhd_duplicates(in_fc, unique_id, out_fc):
     be the 'Permanent_Identifier' column
 
     out_fc: the desired path for the output feature class"""
-    ws = 'in_memory'
+    ws = 'memory'
     env.workspace = ws
 
     lagosGIS.multi_msg("Creating frequency table...")
@@ -192,7 +192,7 @@ def remove_nhd_duplicates(in_fc, unique_id, out_fc):
 # and add the older of the two to a drop list, then run the drop all at once
 
 def remove_geographic_doubles(polygon_fc, out_fc, unique_id, percent_overlap_allowed = 10, keep_fc = '', keep_field = ''):
-    neighbor_table = 'in_memory/neighbortable'
+    neighbor_table = 'memory/neighbortable'
     lagosGIS.multi_msg('Calculating neighbor table...')
     arcpy.PolygonNeighbors_analysis(polygon_fc, neighbor_table, unique_id,
         'AREA_OVERLAP', 'NO_BOTH_SIDES')
@@ -202,21 +202,21 @@ def remove_geographic_doubles(polygon_fc, out_fc, unique_id, percent_overlap_all
     src_field = arcpy.ListFields(neighbor_table, 'src*')[0].name
     nbr_field = arcpy.ListFields(neighbor_table, 'nbr*')[0].name
 
-    arcpy.CopyFeatures_management(polygon_fc, 'in_memory/fc')
-    fdate_field = arcpy.ListFields('in_memory/fc', '*FDate*')[0].name
+    arcpy.CopyFeatures_management(polygon_fc, 'memory/fc')
+    fdate_field = arcpy.ListFields('memory/fc', '*FDate*')[0].name
     lagosGIS.multi_msg('Joining neighbor table to feature class...')
-    arcpy.JoinField_management('in_memory/fc', unique_id, neighbor_table,
+    arcpy.JoinField_management('memory/fc', unique_id, neighbor_table,
                             src_field)
 
     cursor_fields = ['AREA', 'SHAPE@AREA', unique_id, nbr_field, fdate_field]
-##    print([f.name for f in arcpy.ListFields('in_memory/fc')])
+##    print([f.name for f in arcpy.ListFields('memory/fc')])
 
     if keep_fc:
         keep_ids = [row[0] for row in arcpy.da.SearchCursor(keep_fc, keep_field)]
     else:
         keep_ids = []
 
-    with arcpy.da.SearchCursor('in_memory/fc', cursor_fields) as cursor:
+    with arcpy.da.SearchCursor('memory/fc', cursor_fields) as cursor:
         for row in cursor:
 
             # If this row represents a duplicate-type overlap
@@ -228,9 +228,9 @@ def remove_geographic_doubles(polygon_fc, out_fc, unique_id, percent_overlap_all
                 # Then lookup both rows in the overlap and delete the one with
                 # the oldest FDate
                 where_clause = '''"%s" = '%s' OR "%s" = '%s' ''' % (unique_id, src_value, unique_id, nbr_value)
-                dates = [row[4] for row in arcpy.da.SearchCursor('in_memory/fc', cursor_fields, where_clause)]
+                dates = [row[4] for row in arcpy.da.SearchCursor('memory/fc', cursor_fields, where_clause)]
                 lagosGIS.multi_msg("testing. dates %s and %s not in order" % (dates[0], dates[1]))
-                with arcpy.da.UpdateCursor('in_memory/fc', cursor_fields, where_clause) as c:
+                with arcpy.da.UpdateCursor('memory/fc', cursor_fields, where_clause) as c:
                     for r in c:
                         if r[4] == min(dates) and r[4] == max(dates):
                             lagosGIS.multi_msg("PROBLEM! Same date. Resolve pair %s, %s manually." % (src_value, nbr_value))
@@ -245,15 +245,15 @@ def remove_geographic_doubles(polygon_fc, out_fc, unique_id, percent_overlap_all
             else:
                 continue
     for drop_field in [src_field, nbr_field, 'AREA']:
-        arcpy.DeleteField_management('in_memory/fc', drop_field)
-    arcpy.CopyFeatures_management('in_memory/fc', out_fc)
-    for item in [neighbor_table, 'in_memory/fc']:
+        arcpy.DeleteField_management('memory/fc', drop_field)
+    arcpy.CopyFeatures_management('memory/fc', out_fc)
+    for item in [neighbor_table, 'memory/fc']:
         arcpy.Delete_management(item)
 
 
 
 def percent_geographic_doubles(polygon_fc, unique_id, percent_overlap_allowed = 10, keep_fc = '', keep_field = ''):
-    neighbor_table = 'in_memory/neighbortable'
+    neighbor_table = 'memory/neighbortable'
     lagosGIS.multi_msg('Calculating neighbor table...')
     arcpy.PolygonNeighbors_analysis(polygon_fc, neighbor_table, unique_id,
         'AREA_OVERLAP', 'NO_BOTH_SIDES')
@@ -263,21 +263,21 @@ def percent_geographic_doubles(polygon_fc, unique_id, percent_overlap_allowed = 
     src_field = arcpy.ListFields(neighbor_table, 'src*')[0].name
     nbr_field = arcpy.ListFields(neighbor_table, 'nbr*')[0].name
 
-    arcpy.CopyFeatures_management(polygon_fc, 'in_memory/fc')
-    fdate_field = arcpy.ListFields('in_memory/fc', '*FDate*')[0].name
+    arcpy.CopyFeatures_management(polygon_fc, 'memory/fc')
+    fdate_field = arcpy.ListFields('memory/fc', '*FDate*')[0].name
     lagosGIS.multi_msg('Joining neighbor table to feature class...')
-    arcpy.JoinField_management('in_memory/fc', unique_id, neighbor_table,
+    arcpy.JoinField_management('memory/fc', unique_id, neighbor_table,
                             src_field)
 
     cursor_fields = ['AREA', 'SHAPE@AREA', unique_id, nbr_field, fdate_field]
-##    print([f.name for f in arcpy.ListFields('in_memory/fc')])
+##    print([f.name for f in arcpy.ListFields('memory/fc')])
 
     if keep_fc:
         keep_ids = [row[0] for row in arcpy.da.SearchCursor(keep_fc, keep_field)]
     else:
         keep_ids = []
 
-    with arcpy.da.SearchCursor('in_memory/fc', cursor_fields) as cursor:
+    with arcpy.da.SearchCursor('memory/fc', cursor_fields) as cursor:
         for row in cursor:
 
             # If this row represents a duplicate-type overlap
@@ -289,9 +289,9 @@ def percent_geographic_doubles(polygon_fc, unique_id, percent_overlap_allowed = 
                 # Then lookup both rows in the overlap and delete the one with
                 # the oldest FDate
                 where_clause = '''"%s" = '%s' OR "%s" = '%s' ''' % (unique_id, src_value, unique_id, nbr_value)
-                dates = [row[4] for row in arcpy.da.SearchCursor('in_memory/fc', cursor_fields, where_clause)]
+                dates = [row[4] for row in arcpy.da.SearchCursor('memory/fc', cursor_fields, where_clause)]
                 lagosGIS.multi_msg("testing. dates %s and %s not in order" % (dates[0], dates[1]))
-                with arcpy.da.UpdateCursor('in_memory/fc', cursor_fields, where_clause) as c:
+                with arcpy.da.UpdateCursor('memory/fc', cursor_fields, where_clause) as c:
                     for r in c:
                         if r[4] == min(dates) and r[4] == max(dates):
                             lagosGIS.multi_msg("PROBLEM! Same date. Resolve pair %s, %s manually." % (src_value, nbr_value))
@@ -306,5 +306,5 @@ def percent_geographic_doubles(polygon_fc, unique_id, percent_overlap_allowed = 
             else:
                 continue
 
-    for item in [neighbor_table, 'in_memory/fc']:
+    for item in [neighbor_table, 'memory/fc']:
         arcpy.Delete_management(item)

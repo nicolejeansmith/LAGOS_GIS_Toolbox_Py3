@@ -163,9 +163,9 @@ def select_fields(feature_class_or_table, output, field_list, convert_to_table =
         result = arcpy.FeatureClassToFeatureClass_conversion(feature_class_or_table, out_workspace, out_basename, '#', field_mapping)
     else:
         if input_type == "FeatureClass":
-            feature_class_or_table = arcpy.CopyRows_management(feature_class_or_table, 'in_memory/temp_copy')
+            feature_class_or_table = arcpy.CopyRows_management(feature_class_or_table, 'memory/temp_copy')
         result = arcpy.TableToTable_conversion(feature_class_or_table, out_workspace, out_basename, '#', field_mapping)
-        arcpy.Delete_management('in_memory/temp_copy')
+        arcpy.Delete_management('memory/temp_copy')
 
     return result
 

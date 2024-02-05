@@ -42,7 +42,7 @@ def aggregate_watersheds(catchments_fc, nhd_gdb, eligible_lakes_fc, output_fc,
 
     # setup
     arcpy.env.outputCoordinateSystem = arcpy.SpatialReference(5070)
-    arcpy.env.workspace = 'in_memory'
+    arcpy.env.workspace = 'memory'
     temp_gdb = lagosGIS.create_temp_GDB('aggregate_watersheds')
     albers = arcpy.SpatialReference(5070)
 
@@ -95,15 +95,15 @@ def aggregate_watersheds(catchments_fc, nhd_gdb, eligible_lakes_fc, output_fc,
     traces = nhd_network.trace_up_from_waterbody_starts()
 
     # Establish output fc
-    merged_sheds = DM.CreateFeatureclass('in_memory', 'merged_sheds', 'POLYGON', spatial_reference=albers)
+    merged_sheds = DM.CreateFeatureclass('memory', 'merged_sheds', 'POLYGON', spatial_reference=albers)
     DM.AddField(merged_sheds, 'Permanent_Identifier', 'TEXT', field_length=40)
     sheds_cursor = arcpy.da.InsertCursor(merged_sheds, ['Permanent_Identifier', 'SHAPE@'])
 
     # Looping watersheds processing
     # The specific recipe for speed in this loop (about 0.8 seconds per loop/drainage lake):
-    # 1) The watersheds dataset being queried must have an index. (use temp_gdb instead of in_memory above)
+    # 1) The watersheds dataset being queried must have an index. (use temp_gdb instead of memory above)
     # 2) It is faster to AN.Select from a feature layer of the indexed lake/watershed dataset than the dataset itself.
-    # 3) Dissolve must work on something in_memory (not a selected layer on disk) for a big speed increase.
+    # 3) Dissolve must work on something memory (not a selected layer on disk) for a big speed increase.
     # 4) Extraneous fields are NOT ignored by Dissolve and slow it down, so they were removed earlier.
     # 5) Spatial queries were actually quite fast but picked up extraneous catchments, so we will not use that method.
     # 6) Deletions in the loop waste time (1/3 second per loop) and overwriting causes no problems.

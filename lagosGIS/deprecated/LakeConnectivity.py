@@ -18,7 +18,7 @@ def classify_lakes(nhd, out_feature_class, exclude_intermit_flowlines = False, d
         arcpy.AddMessage('Debugging workspace located at {}'.format(temp_gdb))
 
     else:
-        arcpy.env.workspace = 'in_memory'
+        arcpy.env.workspace = 'memory'
 
     if arcpy.Exists("temp_fc"):
         print("There is a problem here.")
@@ -138,7 +138,7 @@ def classify_lakes(nhd, out_feature_class, exclude_intermit_flowlines = False, d
     DM.CopyFeatures("junction_lyr", non10junctions)
 
     # Merge non10vertices with non10junctions
-    DM.Merge([non10junctions, non10vertices], all_non_flag_points)  # inputs both point fc in_memory
+    DM.Merge([non10junctions, non10vertices], all_non_flag_points)  # inputs both point fc memory
     DM.MakeFeatureLayer(all_non_flag_points, "all_non_flag_points_lyr")
 
     # Tests the counts...for some reason I'm not getting stable behavior from the merge.

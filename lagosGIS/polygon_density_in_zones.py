@@ -7,7 +7,7 @@
 import arcpy
 
 
-# requires higher than ArcGIS 10.1--uses in_memory workspace that allows access to the geometry
+# requires higher than ArcGIS 10.1--uses memory workspace that allows access to the geometry
 import lagosGIS
 
 
@@ -25,7 +25,7 @@ def calc(zone_fc, zone_field, polygons_of_interest, output_table, where_clause='
 
     # Setup
     old_workspace = arcpy.env.workspace
-    arcpy.env.workspace = 'in_memory'
+    arcpy.env.workspace = 'memory'
     arcpy.env.outputCoordinateSystem = arcpy.SpatialReference(102039)
     selected_polys = 'selected_polys'
     if arcpy.Exists(selected_polys):

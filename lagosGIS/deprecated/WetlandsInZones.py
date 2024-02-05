@@ -27,7 +27,7 @@ def wetlands_in_zones(infolder, idfield, wetlands, top_outfolder):
     arcpy.CalculateField_management(wetlands, "WetlandHa", expha, "PYTHON")
 
     # Set in memory as workspace. Intermediate output will be held in RAM.
-    mem = "in_memory"
+    mem = "memory"
     arcpy.env.workspace = mem
 
     # Make wetlands in memory.

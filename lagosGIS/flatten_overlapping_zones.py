@@ -25,7 +25,7 @@ def flatten(zone_fc, zone_field, output_fc, output_table, cluster_tolerance='3 M
 
     # Set-up workspace and naming conventions
     orig_env = arcpy.env.workspace
-    arcpy.env.workspace = 'in_memory'
+    arcpy.env.workspace = 'memory'
 
     objectid = [f.name for f in arcpy.ListFields(zone_fc) if f.type == 'OID'][0]
     zoneid_dict = {r[0]: r[1] for r in arcpy.da.SearchCursor(zone_fc, [objectid, zone_field])}

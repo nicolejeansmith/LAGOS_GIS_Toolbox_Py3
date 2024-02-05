@@ -11,7 +11,7 @@ def wetlands_in_zones(zones_fc, zone_field, wetlands_fc, output_table, dissolve_
     # make sure we're only using the right types of wetlands, our feature
     # class excludes everything else but this is a guarantee this will
     # get checked at some point
-    arcpy.env.workspace = 'in_memory'
+    arcpy.env.workspace = 'memory'
     need_selection = False
     with arcpy.da.SearchCursor(wetlands_fc, ["ATTRIBUTE", "WETLAND_TYPE"]) as cursor:
         while need_selection is False:

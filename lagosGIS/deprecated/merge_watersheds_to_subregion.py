@@ -7,7 +7,7 @@ def merge_watersheds(watershed_fcs_list, nhd_gdb, out_fc):
     """Merges watershed fcs that are at HU8 level to subregion level. Checks
     whether there are as many feature classes being merged as there are HU8s
     in the subregion and issues an error, warning, or okay message accordingly."""
-    arcpy.env.workspace = 'in_memory'
+    arcpy.env.workspace = 'memory'
     # get this hu4 boundary
     huc4_code = re.search('\d{4}', os.path.basename(nhd_gdb)).group()
     wbd_hu4 = os.path.join(nhd_gdb, "WBD_HU4")

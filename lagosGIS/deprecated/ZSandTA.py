@@ -19,9 +19,9 @@ tablefolder = os.path.join(outfolder, polyname)
 
 arcpy.env.extent = inzone
 # Set workspace to be in RAM
-arcpy.Delete_management("in_memory")
+arcpy.Delete_management("memory")
 
-mem = "in_memory"
+mem = "memory"
 arcpy.env.workspace = mem
 
 arcpy.Delete_management(mem)

@@ -5,7 +5,7 @@ import arcpy, os
 nwi_input = arcpy.GetParameterAsText(0)
 nhd = arcpy.GetParameterAsText(1)
 outfc = arcpy.GetParameterAsText(2)
-mem = "in_memory"
+mem = "memory"
 arcpy.env.workspace = mem
 cs = arcpy.SpatialReference()
 cs.factoryCode = 102039

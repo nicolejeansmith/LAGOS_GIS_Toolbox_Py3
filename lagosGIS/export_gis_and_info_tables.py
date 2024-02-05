@@ -10,7 +10,7 @@ import os
 import arcpy
 import lagosGIS
 
-arcpy.env.workspace = 'in_memory'
+arcpy.env.workspace = 'memory'
 arcpy.env.overwriteOutput = True
 CURRENT_WORKING_GDB = r'D:\Continental_Limnology\Data_Working\LAGOS_US_GIS_Data_v0.9.gdb'
 OUT_FOLDER_LOCUS = r'D:\Continental_Limnology\Data_Working\Tool_Execution\2021-05-20_Export-LOCUS'

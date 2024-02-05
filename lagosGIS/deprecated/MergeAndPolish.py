@@ -1,6 +1,6 @@
 # mergeandeliminate.py
 import arcpy, os
-mem = "in_memory"
+mem = "memory"
 arcpy.env.workspace = mem
 infolder = arcpy.GetParameterAsText(0)
 outname = arcpy.GetParameterAsText(1)

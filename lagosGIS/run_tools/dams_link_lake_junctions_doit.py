@@ -13,7 +13,7 @@ OUTLETS = r'D:\Continental_Limnology\Data_Working\Tool_Execution\2020-07-23_Inle
 inlets_name = os.path.basename(INLETS)
 outlets_name = os.path.basename(OUTLETS)
 
-arcpy.env.workspace = 'in_memory'
+arcpy.env.workspace = 'memory'
 near = arcpy.GenerateNearTable_analysis(DAMS, [INLETS, OUTLETS], 'near',
                                  search_radius='250 Kilometers', closest='ALL', closest_count='3')
 

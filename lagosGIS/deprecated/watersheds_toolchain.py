@@ -221,8 +221,8 @@ def run(huc4, last_tool='network', wait = False, burn_override=True):
         nt.fix_hydrodem(paths.hydrodem, paths.lagos_catseed, paths.lagos_burn)
         tool_count += 1
     if not wait:
-        # can't delete with wait on because more than one process might be using in_memory?
-        arcpy.Delete_management('in_memory')
+        # can't delete with wait on because more than one process might be using memory?
+        arcpy.Delete_management('memory')
 
     # fill
     if not arcpy.Exists(paths.lagos_fel) and stop_index >= 3:
@@ -264,7 +264,7 @@ def run(huc4, last_tool='network', wait = False, burn_override=True):
     if not arcpy.Exists(paths.iws_sheds) and stop_index >= 6:
 
         # wait for predecessor to exist
-        # useful to split this step into 2nd process. in_memory objects won't interfere, should be safe
+        # useful to split this step into 2nd process. memory objects won't interfere, should be safe
         if wait:
             cat_exists = arcpy.Exists(paths.local_catchments)
             while not cat_exists:
@@ -278,7 +278,7 @@ def run(huc4, last_tool='network', wait = False, burn_override=True):
     if not arcpy.Exists(paths.network_sheds) and stop_index >= 7:
 
         # wait for predecessor to exist
-        # useful to split this step into 2nd process. in_memory objects won't interfere, should be safe
+        # useful to split this step into 2nd process. memory objects won't interfere, should be safe
         if wait:
             cat_exists = arcpy.Exists(paths.local_catchments)
             while not cat_exists:
@@ -324,7 +324,7 @@ if __name__ == '__main__':
             p.log(log_file, repr(e))
             print(e)
         finally:
-            arcpy.Delete_management('in_memory')
+            arcpy.Delete_management('memory')
 
 # TODO: Update mosaic feature
 def update_mosaic(mosaic):
@@ -433,12 +433,12 @@ def run_alternate(huc4, last_tool='network', wait=False, out_dir = '', burn_over
         flow_dir = arcpy.sa.FlowDirection(paths.lagos_fel)
         # enforce same bounds as NHD fdr, so catchments have same HU4 boundary
         wbdhu4 = path.join(paths.gdb, 'WBDHU4')
-        hu4 = arcpy.Select_analysis(wbdhu4, 'in_memory/hu4', "HUC4 = '{}'".format(huc4))
-        hu4_buff = arcpy.Buffer_analysis(hu4, 'in_memory/hu4_buff', '10 meters')
+        hu4 = arcpy.Select_analysis(wbdhu4, 'memory/hu4', "HUC4 = '{}'".format(huc4))
+        hu4_buff = arcpy.Buffer_analysis(hu4, 'memory/hu4_buff', '10 meters')
         arcpy.env.snapRaster = flow_dir
         arcpy.Clip_management(flow_dir, '', paths.lagos_fdr, hu4_buff, clipping_geometry='ClippingGeometry')
         arcpy.CheckInExtension('Spatial')
-        arcpy.Delete_management('in_memory/hu4')
+        arcpy.Delete_management('memory/hu4')
         tool_count += 1
 
 
@@ -453,7 +453,7 @@ def run_alternate(huc4, last_tool='network', wait=False, out_dir = '', burn_over
     if not arcpy.Exists(paths.iws_sheds) and stop_index >= 6:
 
         # wait for predecessor to exist
-        # useful to split this step into 2nd process. in_memory objects won't interfere, should be safe
+        # useful to split this step into 2nd process. memory objects won't interfere, should be safe
         if wait:
             cat_exists = arcpy.Exists(paths.local_catchments)
             while not cat_exists:
@@ -467,7 +467,7 @@ def run_alternate(huc4, last_tool='network', wait=False, out_dir = '', burn_over
     if not arcpy.Exists(paths.network_sheds) and stop_index >= 7:
 
         # wait for predecessor to exist
-        # useful to split this step into 2nd process. in_memory objects won't interfere, should be safe
+        # useful to split this step into 2nd process. memory objects won't interfere, should be safe
         if wait:
             cat_exists = arcpy.Exists(paths.local_catchments)
             while not cat_exists:
@@ -525,7 +525,7 @@ def run_alt_batch():
             p.log(log_file, repr(e))
             print(e)
         finally:
-            arcpy.Delete_management('in_memory')
+            arcpy.Delete_management('memory')
 
 def add_ws_flags():
     # run_list = make_run_list(HU4)

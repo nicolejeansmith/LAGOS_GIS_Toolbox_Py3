@@ -16,7 +16,7 @@ from deprecated import LineDensity
 
 def streams_in_zones(zones_fc, zone_field, streams_fc, output_table):
 
-    arcpy.env.workspace = 'in_memory'
+    arcpy.env.workspace = 'memory'
 
     # this bit enforces the correct ftype restriction just in case
     # geodata doesn't have this filtered already

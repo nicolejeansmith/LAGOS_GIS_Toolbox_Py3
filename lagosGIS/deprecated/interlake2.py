@@ -7,7 +7,7 @@ def aggregate_watersheds(watersheds_fc, nhd_gdb, eligible_lakes,
                             output_fc, mode = ['interlake', 'cumulative']):
     """Creates a feature class with all the aggregated upstream watersheds for all
     eligible lakes (>4ha and certain FCodes) in this subregion."""
-    arcpy.env.workspace = 'in_memory'
+    arcpy.env.workspace = 'memory'
 
     # names
     huc4_code = re.search('\d{4}', os.path.basename(nhd_gdb)).group()

@@ -21,7 +21,7 @@ def calc(zone_fc, zone_field, points_fc, output_table, where_clause='', rename_l
     """
 
     # Set up and filter if elected
-    arcpy.env.workspace = 'in_memory'
+    arcpy.env.workspace = 'memory'
     if where_clause:
         arcpy.MakeFeatureLayer_management(points_fc, "selected_points", where_clause)
     else:

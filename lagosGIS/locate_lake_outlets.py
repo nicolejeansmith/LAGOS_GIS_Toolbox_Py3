@@ -17,7 +17,7 @@ def locate_lake_outlets(nhd_gdb, output_fc):
     :param output_fc: Feature class to save the outlet points to
     :return:
     """
-    arcpy.env.workspace = 'in_memory'
+    arcpy.env.workspace = 'memory'
     network = NHDNetwork.NHDNetwork(nhd_gdb)
     network.define_lakes(force_lagos=True)
 

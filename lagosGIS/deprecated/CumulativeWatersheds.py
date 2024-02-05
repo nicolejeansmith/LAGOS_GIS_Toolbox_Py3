@@ -103,7 +103,7 @@ def cumulative_watersheds(nhd, watersheds, topoutfolder, filterlakes):
         name = os.path.splitext(fc)[0]
         arcpy.AddMessage("Processing " + name + ".")
         # Sets the output to in memory:
-        lakes = "in_memory"
+        lakes = "memory"
         # Repair the lake geometery if needed.
         arcpy.RepairGeometry_management(fc)
         # Make sure the lake's own watershed gets added (merged) back in to the final aggregated watershed:
@@ -178,7 +178,7 @@ def cumulative_watersheds(nhd, watersheds, topoutfolder, filterlakes):
         arcpy.Erase_analysis(pre,fc, os.path.join(CWS, "CWS" + name + ".shp"))
 
 
-        # Delete intermediate in_memory fcs and variables
+        # Delete intermediate memory fcs and variables
         temp_items = [lakejunction, trace, traceshp, tracesel, sheds, sheds_lyr,
                     center, sheds2, sheds3, pre, fc, ownshed]
         cu.cleanup(temp_items)

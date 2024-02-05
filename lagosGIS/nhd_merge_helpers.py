@@ -112,13 +112,13 @@ def deduplicate_nhd(in_feature_class_or_table, out_feature_class_or_table ='', u
     arcpy.AddMessage("Deleting older features with duplicated identifiers...")
 
     # Get a list of distinct IDs that have duplicates
-    arcpy.Frequency_analysis(out_feature_class_or_table, "in_memory/freqtable", unique_id)
-    arcpy.TableSelect_analysis("in_memory/freqtable", "in_memory/dupeslist", '''"FREQUENCY" > 1''')
-    count_dupes = int(arcpy.GetCount_management("in_memory/dupeslist").getOutput(0))
+    arcpy.Frequency_analysis(out_feature_class_or_table, "memory/freqtable", unique_id)
+    arcpy.TableSelect_analysis("memory/freqtable", "memory/dupeslist", '''"FREQUENCY" > 1''')
+    count_dupes = int(arcpy.GetCount_management("memory/dupeslist").getOutput(0))
 
     #If there are any duplicates, remove them by keeping the one with the latest FDate
     if count_dupes > 0:
-        dupe_ids = [row[0] for row in arcpy.da.SearchCursor("in_memory/dupeslist", (unique_id))]
+        dupe_ids = [row[0] for row in arcpy.da.SearchCursor("memory/dupeslist", (unique_id))]
         dupe_filter = ''' "{}" = '{{}}' '''.format(unique_id)
         for id in dupe_ids:
             dates = [row[0] for row in arcpy.da.SearchCursor(out_feature_class_or_table, ["FDate"], dupe_filter.format(id))]
@@ -132,5 +132,5 @@ def deduplicate_nhd(in_feature_class_or_table, out_feature_class_or_table ='', u
         arcpy.AddMessage("{0} features were removed because they were less recently edited than another feature with the same identifier.".format(after_full_count - after_both_count))
 
     arcpy.AddIndex_management(out_feature_class_or_table, "nhd_merge_id", "IDX_nhd_merge_id")
-    arcpy.Delete_management("in_memory/freqtable")
-    arcpy.Delete_management("in_memory/dupeslist")
+    arcpy.Delete_management("memory/freqtable")
+    arcpy.Delete_management("memory/dupeslist")

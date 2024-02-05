@@ -12,7 +12,7 @@ try:
 except:
     arcpy.AddMessage("Add field failed. Check your suffix for spaces or other invalid charcters.")
 
-mem = "in_memory"
+mem = "memory"
 arcpy.env.workspace = mem
 arcpy.AddMessage("Dissolving mask...")
 arcpy.Dissolve_management(maskpoly, os.path.join(mem, "mask"))

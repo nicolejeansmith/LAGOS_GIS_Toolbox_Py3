@@ -27,7 +27,7 @@ def preprocess(padus_combined_fc, output_fc):
 
     # Prep: Select only the fields needed, remove curves (densify) which prevents problems with geometry
     # that prevents DeleteIdentical based on Shape
-    arcpy.env.workspace = 'in_memory'
+    arcpy.env.workspace = 'memory'
     padus_fields = ['FeatClass', 'Own_Type', 'GAP_Sts', 'IUCN_Cat']
     padus_select = lagosGIS.select_fields(padus_combined_fc, 'padus_select', padus_fields, convert_to_table=False)
     arcpy.Densify_edit(padus_select, 'OFFSET', max_deviation = '1 Meters')

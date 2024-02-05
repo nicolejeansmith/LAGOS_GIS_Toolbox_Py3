@@ -258,7 +258,7 @@ for line in lines:
 
 # # Add 100% open water designation to HU12
 # # First select only LAGOS lakes over 250 hectares (0.2% of HU12 size):  3567 lakes
-# arcpy.env.workspace = 'in_memory'
+# arcpy.env.workspace = 'memory'
 # hu12 = [line for line in lines if line['LAGOS Zone Name'] == 'hu12'][0]['Output']
 # lagos_lakes_250ha = AN.Select(LAGOS_LAKES, 'lagos_lakes_250ha', 'Hectares > 250')
 # hu12_erase = AN.Erase(hu12, lagos_lakes_250ha, 'hu12_erase')
@@ -279,7 +279,7 @@ for line in lines:
 #             flag = 'N'
 #     uCursor.updateRow((zone_id, flag))
 #
-# DM.Delete('in_memory')
+# DM.Delete('memory')
 #
 #
 #

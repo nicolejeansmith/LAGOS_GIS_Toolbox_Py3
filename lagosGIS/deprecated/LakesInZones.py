@@ -30,7 +30,7 @@ except:
     pass
 
 # Set in memory as workspace. Intermediate output will be held in RAM.
-mem = "in_memory"
+mem = "memory"
 arcpy.env.workspace = mem
 arcpy.env.overwriteOutput = True
 

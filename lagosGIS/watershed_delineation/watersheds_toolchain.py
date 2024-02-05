@@ -198,8 +198,8 @@ def run(huc4, last_tool='network', wait = False, burn_override=False):
         nt.revise_hydrodem(paths.gdb, paths.hydrodem, paths.filldepth, paths.lagos_catseed, paths.lagos_burn)
         tool_count += 1
     if not wait:
-        # can't delete with wait on because more than one process might be using in_memory?
-        arcpy.Delete_management('in_memory')
+        # can't delete with wait on because more than one process might be using memory?
+        arcpy.Delete_management('memory')
 
     # fill
     if not arcpy.Exists(paths.lagos_fel) and stop_index >= 3:
@@ -235,7 +235,7 @@ def run(huc4, last_tool='network', wait = False, burn_override=False):
     if not arcpy.Exists(paths.iws_sheds) and stop_index >= 6:
 
         # wait for predecessor to exist
-        # useful to split this step into 2nd process. in_memory objects won't interfere, should be safe
+        # useful to split this step into 2nd process. memory objects won't interfere, should be safe
         if wait:
             cat_exists = arcpy.Exists(paths.local_catchments)
             while not cat_exists:
@@ -249,7 +249,7 @@ def run(huc4, last_tool='network', wait = False, burn_override=False):
     if not arcpy.Exists(paths.network_sheds) and stop_index >= 7:
 
         # wait for predecessor to exist
-        # useful to split this step into 2nd process. in_memory objects won't interfere, should be safe
+        # useful to split this step into 2nd process. memory objects won't interfere, should be safe
         if wait:
             cat_exists = arcpy.Exists(paths.local_catchments)
             while not cat_exists:
@@ -301,7 +301,7 @@ if __name__ == '__main__':
             p.log(LOG_FILE, repr(e))
             print(e)
         finally:
-            arcpy.Delete_management('in_memory')
+            arcpy.Delete_management('memory')
 
 def patch_on_network_flag():
     """Patch implemented on Apr 17 to allow more outlets per subregion, if several large networks appear."""

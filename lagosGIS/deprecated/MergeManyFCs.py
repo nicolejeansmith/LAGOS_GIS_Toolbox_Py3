@@ -4,7 +4,7 @@ import arcpy, os
 infolder = arcpy.GetParameterAsText(0)
 topoutfolder = arcpy.GetParameterAsText(1)
 persub = 200
-mem = "in_memory"
+mem = "memory"
 data = []
 if not os.path.exists(os.path.join(topoutfolder, "MergeMany.gdb")):
     arcpy.CreateFileGDB_management(topoutfolder, "MergeMany.gdb")

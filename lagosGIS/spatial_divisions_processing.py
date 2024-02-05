@@ -72,7 +72,7 @@ def find_states(zones_fc, state_fc, zone_name=''):
     field_mapping.addFieldMap(map_states)
 
     # Perform join and use output to replace original fc
-    spjoin = AN.SpatialJoin(zones_fc, state_fc, 'in_memory/spjoin_intersect', 'JOIN_ONE_TO_ONE',
+    spjoin = AN.SpatialJoin(zones_fc, state_fc, 'memory/spjoin_intersect', 'JOIN_ONE_TO_ONE',
                             field_mapping=field_mapping, match_option='INTERSECT')
     DM.AlterField(spjoin, 'states', new_field_name=states_field, clear_field_alias=True)
     DM.Delete(zones_fc)
@@ -93,15 +93,15 @@ def inusa_pct(zone_fc, zoneid, states_fc, zone_name=''):
     DM.AddField(zone_fc, '{}_inusa_pct'.format(zone_name), 'DOUBLE')
     # percent in USA
     arcpy.AddMessage('Tabulating intersection...')
-    arcpy.TabulateIntersection_analysis(zone_fc, zoneid, states_fc, 'in_memory/tabarea')
+    arcpy.TabulateIntersection_analysis(zone_fc, zoneid, states_fc, 'memory/tabarea')
 
     # round to 2 digits and don't let values exceed 100
     inusa_dict = {r[0]:min(round(r[1],2), 100)
-                  for r in arcpy.da.SearchCursor('in_memory/tabarea', [zoneid, 'PERCENTAGE'])}
+                  for r in arcpy.da.SearchCursor('memory/tabarea', [zoneid, 'PERCENTAGE'])}
 
     with arcpy.da.UpdateCursor(zone_fc, [zoneid, 'inusa_pct']) as u_cursor:
         for row in u_cursor:
             row[1] = inusa_dict[row[0]]
             u_cursor.updateRow(row)
 
-    DM.Delete('in_memory/tabarea')
+    DM.Delete('memory/tabarea')

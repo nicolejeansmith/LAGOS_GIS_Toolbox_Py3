@@ -4,7 +4,7 @@ import lagosGIS
 import zonal_summary_of_raster_data
 
 def stats_overlap(non_overlapping_zones_list, zone_field, in_value_raster, out_table, is_thematic):
-    temp_out_tables = ['in_memory/' + os.path.basename(zfc) + "_temp_table" for zfc in non_overlapping_zones_list]
+    temp_out_tables = ['memory/' + os.path.basename(zfc) + "_temp_table" for zfc in non_overlapping_zones_list]
 
     arcpy.CheckOutExtension("Spatial")
     for zones, temp_table in zip(non_overlapping_zones_list, temp_out_tables):

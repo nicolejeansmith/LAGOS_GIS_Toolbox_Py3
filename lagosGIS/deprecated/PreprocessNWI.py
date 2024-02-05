@@ -12,7 +12,7 @@ def InsideState(state, nwi, lakes, outfc):
     # Select only wetlands with their center inside this state
     # This way all wetlands will only be represented once when we merge all states
 
-    arcpy.env.workspace = 'in_memory'
+    arcpy.env.workspace = 'memory'
     arcpy.MakeFeatureLayer_management(nwi, "nwi_lyr")
     lagosGIS.multi_msg('Selecting wetlands with their center in the state.')
     arcpy.SelectLayerByLocation_management("nwi_lyr", 'HAVE_THEIR_CENTER_IN', state,'','NEW_SELECTION')

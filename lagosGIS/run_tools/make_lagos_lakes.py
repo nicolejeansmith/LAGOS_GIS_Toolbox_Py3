@@ -182,7 +182,7 @@ def make_lagos_lakes():
     arcpy.Delete_management(all_lakes_lyr)
 
     # Step 5: Repair geometry
-    # Optional: to see which features will change: arcpy.CheckGeometry_management(CONUS_LAKES_FC, 'in_memory/checkgeom_lakes')
+    # Optional: to see which features will change: arcpy.CheckGeometry_management(CONUS_LAKES_FC, 'memory/checkgeom_lakes')
     # 155 self-intersections
     arcpy.RepairGeometry_management(CONUS_LAKES_FC)
 

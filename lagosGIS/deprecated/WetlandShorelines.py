@@ -23,7 +23,7 @@ albers.factoryCode = 102039
 albers.create()
 arcpy.env.outputCoordinateSystem = albers
 arcpy.env.overwriteOutput = "TRUE"
-mem = "in_memory"
+mem = "memory"
 arcpy.env.parallelProcessingFactor = "100%"
 
 # Make an output gdb

@@ -25,7 +25,7 @@ def burn(subregion_ned, nhd_gdb, burnt_out, projection = arcpy.SpatialReference(
     lagosGIS.multi_msg("Prepared NHDFlowline for rasterizing.")
 
     # Feature to Raster- rasterize the NHDFlowline
-    flow_line_raster = "in_memory/flow_line_raster"
+    flow_line_raster = "memory/flow_line_raster"
     arcpy.FeatureToRaster_conversion(flow_line, "OBJECTID", flow_line_raster, "10")
     lagosGIS.multi_msg("Converted flowlines to raster.")
 

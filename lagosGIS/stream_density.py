@@ -22,7 +22,7 @@ def calc_all(zones_fc, zone_field, lines_fc, out_table, zone_prefix=''):
     """
 
     # Set up
-    arcpy.env.workspace = 'in_memory'
+    arcpy.env.workspace = 'memory'
     arcpy.env.outputCoordinateSystem = arcpy.SpatialReference(102039)
     if zone_prefix:
         streams_density_field = '{}_streams_all_mperha'.format(zone_prefix)
@@ -40,7 +40,7 @@ def calc_all(zones_fc, zone_field, lines_fc, out_table, zone_prefix=''):
     intermit_fcodes = ['46003', '46007']
 
     # Select only necessary columns from zones for speed
-    zones_only = lagosGIS.select_fields(zones_fc, 'in_memory/zones_only', [zone_field], convert_to_table=False)
+    zones_only = lagosGIS.select_fields(zones_fc, 'memory/zones_only', [zone_field], convert_to_table=False)
 
     # ---EMULATES line_density_in_zones.py, BUT RE-USES IDENTITY RESULT FOR ALL CALCULATIONS---------------------------
     # Perform identity analysis to crack lines at polygon boundaries
@@ -94,7 +94,7 @@ def calc_all(zones_fc, zone_field, lines_fc, out_table, zone_prefix=''):
         arcpy.DeleteField_management(lines_stat_full, 'SUM_length_m')
         arcpy.DeleteField_management(lines_stat_full, 'FREQUENCY')
 
-        # copy output to an in_memory fc with same name as output field so we can delete lines_stat_full
+        # copy output to an memory fc with same name as output field so we can delete lines_stat_full
         summarized = arcpy.CopyRows_management(lines_stat_full, density_field_name)
         # cleanup
         for item in [lines_stat, lines_stat_full]:

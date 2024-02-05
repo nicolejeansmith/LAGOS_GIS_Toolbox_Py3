@@ -166,7 +166,7 @@ def export(in_table, out_folder, output_schema=True, prefix='', new_table_name='
     """
 
     # Get file basename without extension and specify auxiliary table output paths
-    if arcpy.env.workspace == 'in_memory' and ':' not in in_table:
+    if arcpy.env.workspace == 'memory' and ':' not in in_table:
         name = os.path.basename(str(in_table))
     else:
         name = os.path.splitext(os.path.basename(in_table))[0]

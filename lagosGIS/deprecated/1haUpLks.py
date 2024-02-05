@@ -9,7 +9,7 @@ outfolder = arcpy.GetParameterAsText(2) # folder for output
 
 # Setup environments and variables
 arcpy.ResetEnvironments()
-mem = "in_memory"
+mem = "memory"
 arcpy.env.workspace = nhd
 arcpy.env.overwriteOutput = "True"
 waterbody = os.path.join(nhd, "Hydrography", "NHDWaterbody")

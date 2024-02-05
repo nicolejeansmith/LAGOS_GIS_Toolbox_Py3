@@ -56,7 +56,7 @@ def summarize(zone_fc, zone_field, class_fc, out_table, class_field, rename_tag=
         return table
 
     # Tabulate intersection between zones and polygons using class groupings
-    arcpy.env.workspace = 'in_memory'
+    arcpy.env.workspace = 'memory'
     tab = arcpy.TabulateIntersection_analysis(zone_fc, zone_field, class_fc, 'tab', class_field, xy_tolerance='0.001 Meters')
 
     # Guard against all numeric values--can't pivot when that is the case

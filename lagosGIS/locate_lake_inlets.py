@@ -18,7 +18,7 @@ def locate_lake_inlets(nhd_gdb, output_fc):
     :return:
     """
 
-    arcpy.env.workspace = 'in_memory'
+    arcpy.env.workspace = 'memory'
     network = NHDNetwork.NHDNetwork(nhd_gdb)
     network.define_lakes(force_lagos=True)
 

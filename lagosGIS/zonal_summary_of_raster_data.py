@@ -33,7 +33,7 @@ def calc(zone_fc, zone_field, in_value_raster, out_table, is_thematic, unflat_ta
     """
 
     orig_env = env.workspace
-    env.workspace = 'in_memory'
+    env.workspace = 'memory'
     arcpy.SetLogHistory(False)
     arcpy.CheckOutExtension("Spatial")
 
@@ -243,7 +243,7 @@ def calc(zone_fc, zone_field, in_value_raster, out_table, is_thematic, unflat_ta
         zone_type = [f.type for f in arcpy.ListFields(zone_fc, flat_zoneid)][0]
 
         # create table and get fields to add
-        unflat_result = DM.CreateTable('in_memory', os.path.basename(out_table))
+        unflat_result = DM.CreateTable('memory', os.path.basename(out_table))
         editable_fields = [f for f in arcpy.ListFields(intermediate_table)
                            if f.editable and f.name.lower() != flat_zoneid.lower()]
 
