@@ -161,7 +161,7 @@ def test_all(out_gdb):
     arcpy.AddMessage("All test files will start with date-time prefix {}".format(dt_prefix))
     for method in __all__:
         if method == 'rasterize_zones':
-            eval_str = '''{}('{}')'''.format(method, out_gdb)
+            eval_str = '''{}('{}')'''.format(method, out_gdb).replace("\\", "/")
             arcpy.AddMessage('\n' + 'TESTING: ' + eval_str)
             eval(eval_str)
             old_name = os.path.join(out_gdb, 'hu12_raster')
@@ -170,7 +170,7 @@ def test_all(out_gdb):
         elif method in ('summarize_raster_for_all_zones', 'export_to_csv'):
             continue # skip
         else:
-            eval_str = '''{}(os.path.join('{}', '{}_{}'))'''.format(method, out_gdb, dt_prefix, method)
+            eval_str = '''{}(os.path.join('{}', '{}_{}'))'''.format(method, out_gdb, dt_prefix, method).replace("\\", "/")
             arcpy.AddMessage('\n' + 'TESTING: ' + eval_str)
             eval(eval_str)
 

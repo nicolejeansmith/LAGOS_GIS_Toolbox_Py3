@@ -24,7 +24,7 @@ def calc(zones_fc, zone_field, lines_fc, out_table, where_clause='', rename_labe
 
     # Setup: enforce coordinates, make names, filter lines if elected
     arcpy.env.workspace = 'in_memory'
-    arcpy.env.outputCoordinatesystem = arcpy.SpatialReference(102039)
+    arcpy.env.outputCoordinateSystem = arcpy.SpatialReference(102039)
 
     if rename_label:
         density_field_name = '{}_mperha'.format(rename_label)

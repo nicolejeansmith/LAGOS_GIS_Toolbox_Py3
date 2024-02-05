@@ -178,7 +178,7 @@ def export(in_table, out_folder, output_schema=True, prefix='', new_table_name='
     if field_list:
         fields_qa = field_list
     else:
-        fields_qa = [f.name for f in arcpy.ListFields(in_table) if f.type <> 'Geometry' and f.type <> 'OID' and f.name <> 'Shape_Area' and f.name <> 'Shape_Length' and f.name <> 'TARGET_FID']
+        fields_qa = [f.name for f in arcpy.ListFields(in_table) if f.type != 'Geometry' and f.type != 'OID' and f.name != 'Shape_Area' and f.name != 'Shape_Length' and f.name != 'TARGET_FID']
     ha_prefix = tuple(["Ha_{}".format(d) for d in range(10)])
     fields = [f for f in fields_qa if not f.startswith(ha_prefix) and f not in ['CELL_COUNT', 'ORIGINAL_COUNT']]
 
