@@ -10,7 +10,8 @@ import arcpy
 from arcpy import env
 this_files_dir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(this_files_dir)
-SNAP_RASTER = '../common_grid.tif'
+SNAP_RASTER = os.path.abspath('../common_grid.tif')
+arcpy.AddMessage("SNAP_RASTER at {}".format(SNAP_RASTER))
 CELL_SIZE = 90
 
 
@@ -24,6 +25,7 @@ def rasterize(polygon_fc_list, output_workspace):
     """
 
     for polygon_fc in polygon_fc_list:
+        arcpy.AddMessage("Polygon fc exists?".format(arcpy.Exists(polygon_fc)))
         # Choose 30m for spatial divisions with smaller average feature size (hu12, buff100, buff500, nws)
         # Choose 90m for spatial divisions larger than about the average County size
         # 90m is enough to get mean raster stats for zone with necessary precision
@@ -36,6 +38,7 @@ def rasterize(polygon_fc_list, output_workspace):
         env.extent = polygon_fc
         env.snapRaster = SNAP_RASTER
         short_name = os.path.splitext(os.path.basename(polygon_fc))[0]
+        arcpy.AddMessage(short_name)
         arcpy.AddMessage("Converting {}...".format(short_name))
         output_raster = os.path.join(output_workspace, short_name + '_raster')
         zoneid_field = arcpy.ListFields(polygon_fc, '*zoneid')[0].name
@@ -50,9 +53,9 @@ def rasterize(polygon_fc_list, output_workspace):
 
 
 def main():
-    polygon_fc_input = arcpy.GetParameterAsText(0)
-    polygon_fc_list = polygon_fc_input.split(";")
+    polygon_fc_input = arcpy.GetParameter(0)
     output_workspace = arcpy.GetParameterAsText(1)
+    polygon_fc_list = [param.value for param in polygon_fc_input]
     rasterize(polygon_fc_list, output_workspace)
 
 

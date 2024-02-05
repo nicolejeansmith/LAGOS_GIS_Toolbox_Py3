@@ -6,7 +6,7 @@
 
 import os
 import arcpy
-from . import polygon_density_in_zones
+from .polygon_density_in_zones import calc as polygon_density_calc
 import lagosGIS
 
 
@@ -178,7 +178,7 @@ def calc_all(zones_fc, zone_field, lakes_fc, output_table):
     # Run Polygon Density in Zones for all select query & metric pairings and save to temporary tables
     for sel, temp_table in zip(selections, temp_tables):
         arcpy.AddMessage("Creating temporary table called {0} for lakes where {1}".format(temp_table, sel))
-        polygon_density_in_zones.calc(zones_fc, zone_field, temp_lakes, temp_table, sel)
+        polygon_density_calc(zones_fc, zone_field, temp_lakes, temp_table, sel)
         new_fields = ['Poly_ha', 'Poly_pct', 'Poly_n', 'Poly_nperha']
         for f in new_fields:
             arcpy.AlterField_management(temp_table, f, f.replace('Poly', temp_table))
