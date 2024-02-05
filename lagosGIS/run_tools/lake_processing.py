@@ -35,11 +35,11 @@ def add_zoneids_to_lakes(lakes_points_fc, lakes_poly, mgdb):
             DM.AddField(lakes_points_fc, zoneid, 'TEXT', '20')
 
         join_fc = arcpy.SpatialJoin_analysis(lakes_points_fc,
-                                             zone, 'memory/join_fc', 'JOIN_ONE_TO_ONE', match_option='INTERSECT')
+                                             zone, 'in_memory/join_fc', 'JOIN_ONE_TO_ONE', match_option='INTERSECT')
         zoneid1 = '{}_1'.format(zoneid)
         # joined always gets _1 suffix bc same name in lakes
         join_missing = arcpy.Select_analysis(join_fc,
-                                             'memory/join_missing', '{} is null'.format(zoneid1))
+                                             'in_memory/join_missing', '{} is null'.format(zoneid1))
         arcpy.DeleteField_management(join_missing, zoneid1)
         update_vals = {}
 
@@ -48,7 +48,7 @@ def add_zoneids_to_lakes(lakes_points_fc, lakes_poly, mgdb):
         print(count_missing)
         if count_missing > 0:
             print("Using CLOSEST join...")
-            join_fc2 = arcpy.SpatialJoin_analysis(join_missing, zone, 'memory/join_fc2', 'JOIN_ONE_TO_ONE',
+            join_fc2 = arcpy.SpatialJoin_analysis(join_missing, zone, 'in_memory/join_fc2', 'JOIN_ONE_TO_ONE',
                                                   match_option='CLOSEST')
             update_vals = {r[0]: r[1] for r in arcpy.da.SearchCursor(join_fc2, ['lagoslakeid', zoneid1])}
 
@@ -63,7 +63,7 @@ def add_zoneids_to_lakes(lakes_points_fc, lakes_poly, mgdb):
                 row[1] = zone_dict[row[0]]
                 u_cursor.updateRow(row)
 
-        DM.Delete('memory')
+        DM.Delete('in_memory')
 
     # update the main lakes layer
     zoneids = ['{}_zoneid'.format(z) for z in zones]
@@ -86,8 +86,8 @@ def calc_glaciation(fc, zone_field, zone_name=''):
     else:
         zone_name = os.path.basename(fc)
     g_field = '{}_glaciatedlatewisc'.format(zone_name)
-    AN.TabulateIntersection(fc, zone_field, GLACIAL_EXTENT, 'memory/glacial_tab')
-    glacial_pct = {r[0]:r[1] for r in arcpy.da.SearchCursor('memory/glacial_tab', [zone_field, 'PERCENTAGE'])}
+    AN.TabulateIntersection(fc, zone_field, GLACIAL_EXTENT, 'in_memory/glacial_tab')
+    glacial_pct = {r[0]:r[1] for r in arcpy.da.SearchCursor('in_memory/glacial_tab', [zone_field, 'PERCENTAGE'])}
     DM.AddField(fc, g_field, 'TEXT', field_length=20)
     with arcpy.da.UpdateCursor(fc, [zone_field, g_field]) as u_cursor:
         for row in u_cursor:
@@ -102,7 +102,7 @@ def calc_glaciation(fc, zone_field, zone_name=''):
                 else:
                     glaciation = 'Partially_Glaciated'
             u_cursor.updateRow((zoneid, glaciation))
-    DM.Delete('memory/glacial_tab')
+    DM.Delete('in_memory/glacial_tab')
 
 
 def find_states(fc, state_fc, zone_name=''):
@@ -130,7 +130,7 @@ def find_states(fc, state_fc, zone_name=''):
     field_mapping.addFieldMap(map_states)
 
     # perform join and use output to replace original fc
-    spjoin = AN.SpatialJoin(fc, state_fc, 'memory/spjoin_intersect', 'JOIN_ONE_TO_ONE',
+    spjoin = AN.SpatialJoin(fc, state_fc, 'in_memory/spjoin_intersect', 'JOIN_ONE_TO_ONE',
                             field_mapping=field_mapping, match_option='INTERSECT')
     DM.AlterField(spjoin, 'states', new_field_name=states_field, clear_field_alias=True)
     DM.Delete(fc)

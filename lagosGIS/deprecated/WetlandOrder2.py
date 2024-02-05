@@ -16,7 +16,7 @@ rivex = arcpy.GetParameterAsText(0) # A shapefile of rivers that has the "Strahl
 nwi = arcpy.GetParameterAsText(1) # NWI feature class
 lakes = arcpy.GetParameterAsText(2)
 outfolder = arcpy.GetParameterAsText(3) # Location where output gets stored.
-ram = "memory"
+ram = "in_memory"
 
 # Environmental Settings
 arcpy.ResetEnvironments()

@@ -12,7 +12,7 @@ def wall(nhd_gdb, rasters_list, outfolder, height = '500',
     """For one or more HU8s within the same subregion (nhd_gdb variable),
     adds walls at the boundaries to force flow direction that do not cross
     the boundary."""
-    env.workspace = 'memory'
+    env.workspace = 'in_memory'
     env.outputCoordinateSystem = projection
     env.compression = "NONE"
     env.snapRaster = rasters_list[0] # they all have the same snap

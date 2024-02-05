@@ -19,7 +19,7 @@ def line_density(zones, zonefield, lines, out_table, interest_selection_expr):
 ##        os.mkdir(outfolder)
 
     # Environmental Settings
-    ws = "memory"
+    ws = "in_memory"
 
     if interest_selection_expr:
         arcpy.MakeFeatureLayer_management(lines, "selected_lines", interest_selection_expr)

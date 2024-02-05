@@ -10,7 +10,7 @@ rds = arcpy.GetParameterAsText(2)
 outfolder =  arcpy.GetParameterAsText(3)
 
 # Environmental Settings
-mem = "memory"
+mem = "in_memory"
 arcpy.env.workspace = mem
 arcpy.env.overwriteOutput = True
 

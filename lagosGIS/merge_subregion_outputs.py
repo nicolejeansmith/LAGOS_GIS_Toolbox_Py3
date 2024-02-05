@@ -107,7 +107,7 @@ def deduplicate(merged_file, rule_dictionary, unique_id='lagoslakeid'):
     print(order_by_clause)
 
     print("Finding duplicate ids...")
-    freq = arcpy.Frequency_analysis(merged_file, 'memory/freq', unique_id)
+    freq = arcpy.Frequency_analysis(merged_file, 'in_memory/freq', unique_id)
     dupe_ids = [row[0] for row in arcpy.da.SearchCursor(freq, unique_id, '''"FREQUENCY" > 1''')]
 
     for id in dupe_ids:
@@ -128,7 +128,7 @@ def deduplicate(merged_file, rule_dictionary, unique_id='lagoslakeid'):
                 counter += 1
         print(' ')
 
-    arcpy.Delete_management('memory/freq')
+    arcpy.Delete_management('in_memory/freq')
     for f in sort_fields:
         DM.DeleteField(merged_file, f)
 

@@ -21,7 +21,7 @@ def upstream_lakes(nhd_gdb, output_table, unique_id = 'lagoslakeid'):
     nhd_junctions = os.path.join(nhd_gdb, 'HYDRO_NET_Junctions')
     hydro_net = os.path.join(nhd_gdb, 'Hydrography', 'HYDRO_NET')
 
-    arcpy.env.workspace = 'memory'
+    arcpy.env.workspace = 'in_memory'
 
     arcpy.AddMessage('Preparing layers and fields for calculations....')
     # arcpy.MakeFeatureLayer_management(nhd_junctions, 'junctions')

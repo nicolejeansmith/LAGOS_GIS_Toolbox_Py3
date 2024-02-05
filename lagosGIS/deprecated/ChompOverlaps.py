@@ -13,7 +13,7 @@ except:
 scratch = os.path.join(outfolder, "ChompOverlaps.gdb")
 arcpy.CopyFeatures_management(inpoly, os.path.join(scratch, "inpoly"))
 scratchpoly = os.path.join(scratch, "inpoly")
-mem = "memory"
+mem = "in_memory"
 arcpy.env.workspace = mem
 arcpy.Split_analysis(inpoly, inpoly, field, mem, '1')
 fcs = []

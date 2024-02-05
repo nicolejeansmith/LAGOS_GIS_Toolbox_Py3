@@ -34,7 +34,7 @@ except:
 arcpy.CalculateField_management(zone, "tempid", '''"temp" + str(!OBJECTID!)''', "PYTHON")
 
 # Splitting zones into single polygon feature classes
-mem = "memory"
+mem = "in_memory"
 arcpy.env.workspace = mem
 arcpy.Split_analysis(zone, zone, "tempid", mem, "10 meters")
 arcpy.AddMessage("Done splitting zones.")
@@ -63,7 +63,7 @@ def mergemany(infolder,topoutfolder):
     #infolder = arcpy.GetParameterAsText(0)
     #topoutfolder = arcpy.GetParameterAsText(1)
     persub = 200
-    mem = "memory"
+    mem = "in_memory"
     data = []
     if not os.path.exists(os.path.join(topoutfolder, "ZonalStatistics.gdb")):
         arcpy.CreateFileGDB_management(topoutfolder, "ZonalStatistics.gdb")

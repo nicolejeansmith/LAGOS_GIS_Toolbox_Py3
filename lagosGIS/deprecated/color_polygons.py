@@ -19,7 +19,7 @@ def colorPolygons(in_feature_class, feature_field, out_feature_class, needs_diss
 
     # Initialize variables
     if needs_dissolve:
-        temp_features = 'memory/dissolve'
+        temp_features = 'in_memory/dissolve'
         bldissolved = False
         # Dissolve on non-ObjectID field
         desc = arcpy.Describe(in_feature_class)
@@ -49,7 +49,7 @@ def colorPolygons(in_feature_class, feature_field, out_feature_class, needs_diss
     arcpy.AddMessage("Identifying overlapping polygons...")
     arcpy.env.outputMFlag = "Disabled"
     result = arcpy.PolygonNeighbors_analysis(temp_features,
-        'memory/neighbors', oid_field, "AREA_OVERLAP", "BOTH_SIDES")
+        'in_memory/neighbors', oid_field, "AREA_OVERLAP", "BOTH_SIDES")
     if 'WARNING 000117:' in result.getMessages(1):
         arcpy.AddError("Input feature zone data: {} does not contain "
                         "overlapping features.".format(temp_features))
@@ -59,7 +59,7 @@ def colorPolygons(in_feature_class, feature_field, out_feature_class, needs_diss
     arcpy.AddMessage("Calculating feature subsets without overlaps...")
 
     # Retrieve as array with columns src_FID and nbr_FID
-    arr = arcpy.da.TableToNumPyArray('memory/neighbors',
+    arr = arcpy.da.TableToNumPyArray('in_memory/neighbors',
         ['src_%s' % oid_field, 'nbr_%s' % oid_field])
     arr = numpy.array(arr.tolist())
 

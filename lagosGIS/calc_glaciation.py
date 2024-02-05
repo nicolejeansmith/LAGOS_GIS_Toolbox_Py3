@@ -30,8 +30,8 @@ def calc(zone_fc, glacial_extent_fc, zone_field, zone_prefix=''):
     g_field = '{}_glaciatedlatewisc_pct'.format(zone_prefix)
 
     # Tabulate area and rename output field
-    AN.TabulateIntersection(zone_fc, zone_field, glacial_extent_fc, 'memory/glacial_tab')
-    glacial_pct = {r[0]:r[1] for r in arcpy.da.SearchCursor('memory/glacial_tab', [zone_field, 'PERCENTAGE'])}
+    AN.TabulateIntersection(zone_fc, zone_field, glacial_extent_fc, 'in_memory/glacial_tab')
+    glacial_pct = {r[0]:r[1] for r in arcpy.da.SearchCursor('in_memory/glacial_tab', [zone_field, 'PERCENTAGE'])}
     DM.AddField(zone_fc, g_field, 'DOUBLE')
 
     # Cursor will essentially round to 2 decimal places, but also correct for TabulateArea percentages that slightly
@@ -51,6 +51,6 @@ def calc(zone_fc, glacial_extent_fc, zone_field, zone_prefix=''):
             u_cursor.updateRow((zoneid, glaciation))
 
     # Clean up
-    DM.Delete('memory/glacial_tab')
+    DM.Delete('in_memory/glacial_tab')
 
     return zone_fc

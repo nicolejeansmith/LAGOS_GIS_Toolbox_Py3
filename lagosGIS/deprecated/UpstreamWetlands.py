@@ -9,7 +9,7 @@ outfolder = arcpy.GetParameterAsText(2) # folder for output
 
 # Setup environments and variables
 arcpy.ResetEnvironments()
-mem = "memory"
+mem = "in_memory"
 arcpy.env.workspace = mem
 arcpy.env.overwriteOutput = "True"
 

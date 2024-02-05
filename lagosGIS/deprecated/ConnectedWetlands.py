@@ -22,7 +22,7 @@ import lagosGIS
 from polygon_density_in_zones import calc
 
 def connected_wetlands(lakes_fc, lake_id_field, wetlands_fc, out_table):
-    env.workspace = 'memory'
+    env.workspace = 'in_memory'
     env.outputCoordinateSystem = arcpy.SpatialReference(102039)
 
     arcpy.Buffer_analysis(lakes_fc, 'lakes_30m', '30 meters')

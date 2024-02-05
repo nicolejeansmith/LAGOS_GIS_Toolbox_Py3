@@ -20,7 +20,7 @@ def attribution(zone_points, zone_field, in_value_raster, out_table, rename_tag=
     :return:
     """
 
-    arcpy.env.workspace = 'memory'
+    arcpy.env.workspace = 'in_memory'
     arcpy.CheckOutExtension("Spatial")
 
     # Extract values to points

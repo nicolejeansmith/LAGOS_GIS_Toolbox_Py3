@@ -124,8 +124,8 @@ def read_job_control(job_control_csv, start_line=-1, end_line=-1, validate=False
             else:
                 print("{} already exists.".format(output))
 
-            # Keep memory workspace from carrying over to the next call
-            arcpy.Delete_management('memory')
+            # Keep in_memory workspace from carrying over to the next call
+            arcpy.Delete_management('in_memory')
 
         # Finish
         print("ALL EXCEPTION MESSAGES FROM THIS RUN:----------------")

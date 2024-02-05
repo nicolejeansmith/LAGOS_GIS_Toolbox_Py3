@@ -34,7 +34,7 @@ except:
 arcpy.CalculateField_management(zone, "tempid", '''"temp" + str(!OBJECTID!)''', "PYTHON")
 
 # Splitting zones into single polygon feature classes
-mem = "memory"
+mem = "in_memory"
 arcpy.env.workspace = mem
 arcpy.Split_analysis(zone, zone, "tempid", mem, "10 meters")
 arcpy.AddMessage("Done splitting zones.")

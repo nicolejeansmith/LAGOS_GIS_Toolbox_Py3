@@ -35,7 +35,7 @@ def upstream_lakes(nhd_gdb, output_table, unique_id = 'lagoslakeid'):
     nhd_junctions = os.path.join(nhd_gdb, 'HYDRO_NET_Junctions')
     hydro_net = os.path.join(nhd_gdb, 'Hydrography', 'HYDRO_NET')
 
-    arcpy.env.workspace = 'memory'
+    arcpy.env.workspace = 'in_memory'
 
     arcpy.AddMessage('Preparing layers and fields for calculations....')
     arcpy.MakeFeatureLayer_management(nhd_junctions, 'junctions')
@@ -160,7 +160,7 @@ def upstream_lakes(nhd_gdb, output_table, unique_id = 'lagoslakeid'):
 
     # write out the final file and clean up intermediates
     arcpy.CopyRows_management('output_table', output_table)
-    for item in ['junctions', 'gte_4ha_lakes', 'gte_10ha_lakes', 'gte_1ha_lakes', 'output_table', 'memory']:
+    for item in ['junctions', 'gte_4ha_lakes', 'gte_10ha_lakes', 'gte_1ha_lakes', 'output_table', 'in_memory']:
         arcpy.Delete_management(item)
 
 def main():

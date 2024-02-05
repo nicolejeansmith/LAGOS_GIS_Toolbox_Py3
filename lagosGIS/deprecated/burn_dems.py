@@ -26,7 +26,7 @@ def burn_streams_and_sinks(subregion_ned, nhd_gdb, burnt_out,
     env.outputCoordinateSystem = projection
     env.compression = "LZ77" # compress temp tifs for speed
     env.extent = subregion_ned
-    env.workspace = 'memory'
+    env.workspace = 'in_memory'
 
     burnline = os.path.join(nhd_gdb, 'NHDBurnLineEvent')
     if not arcpy.Exists(burnline):
@@ -107,8 +107,8 @@ def burn_streams_and_sinks(subregion_ned, nhd_gdb, burnt_out,
     walled = Con(no_wall, burnt_with_sinks, (burnt_with_sinks + walls))
 
     arcpy.AddMessage("Saving output raster...")
-    walled.save('memory/walled_save')
-    arcpy.CopyRaster_management('memory/walled_save', burnt_out) # 2 steps in order to use raster compression
+    walled.save('in_memory/walled_save')
+    arcpy.CopyRaster_management('in_memory/walled_save', burnt_out) # 2 steps in order to use raster compression
 
 
     # Delete intermediate rasters and shapefiles

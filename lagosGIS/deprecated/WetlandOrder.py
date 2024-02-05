@@ -18,7 +18,7 @@ def split_strahler(stream_area_fc, streams, out_area_fc):
     # 4) Use identity function to split up the StreamRiver polygons at the
     #    allocation polygon boundaries, and add the Strahler values
     old_workspace = env.workspace
-    env.workspace = 'memory'
+    env.workspace = 'in_memory'
     lagosGIS.multi_msg("Splitting stream area polygons between confluences and joining 1) Strahler order to them...")
     lagosGIS.multi_msg('next messages for testing')
     arcpy.CheckOutExtension('Spatial')
@@ -36,7 +36,7 @@ def split_strahler(stream_area_fc, streams, out_area_fc):
     lagosGIS.multi_msg("Splitting strema area polygons finished.")
 
 def wetland_order(rivex, stream_area_fc, nwi, out_fc):
-    arcpy.env.workspace = 'memory'
+    arcpy.env.workspace = 'in_memory'
     arcpy.env.outputCoordinateSystem = arcpy.SpatialReference(102039)
     arcpy.env.extent = nwi
 
@@ -166,7 +166,7 @@ def wetland_order(rivex, stream_area_fc, nwi, out_fc):
             else:
                 row[1] = "Connected"
             cursor.updateRow(row)
-    arcpy.Delete_management('memory')
+    arcpy.Delete_management('in_memory')
 
 def test():
     # User input parameters:

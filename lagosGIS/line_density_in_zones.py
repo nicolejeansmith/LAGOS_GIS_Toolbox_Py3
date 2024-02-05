@@ -23,7 +23,7 @@ def calc(zones_fc, zone_field, lines_fc, out_table, where_clause='', rename_labe
     """
 
     # Setup: enforce coordinates, make names, filter lines if elected
-    arcpy.env.workspace = 'memory'
+    arcpy.env.workspace = 'in_memory'
     arcpy.env.outputCoordinateSystem = arcpy.SpatialReference(102039)
 
     if rename_label:
@@ -78,7 +78,7 @@ def calc(zones_fc, zone_field, lines_fc, out_table, where_clause='', rename_labe
         arcpy.DeleteField_management(lines_stat_full, 'SUM_length_m')
         arcpy.DeleteField_management(lines_stat_full, 'FREQUENCY')
 
-        # Copy output to an memory fc with same name as output field so we can delete lines_stat_full
+        # Copy output to an in_memory fc with same name as output field so we can delete lines_stat_full
         summarized = arcpy.CopyRows_management(lines_stat_full, density_field_name)
 
         # Cleanup

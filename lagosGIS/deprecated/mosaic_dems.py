@@ -27,7 +27,7 @@ def stage_files(nhd_gdb, ned_dir, ned_footprints_fc, out_dir, is_zipped):
     :return: The subdirectory created in the out_dir
     """
 
-    env.workspace = 'memory'
+    env.workspace = 'in_memory'
 
     #####################################################################
     arcpy.AddMessage("1) Creating Directory Structure and Copying NHD Geodatabase")
@@ -161,7 +161,7 @@ def mosaic(in_workspace, nhd_gdb, out_dir, available_ram=4, projection=arcpy.Spa
     arcpy.MakeFeatureLayer_management(wbd_hu4, "Subregion", whereClause)
 
     # Apply a 5000 meter buffer around subregion
-    subregion_buffer = "memory/Subregion_Buffered_5000m"
+    subregion_buffer = "in_memory/Subregion_Buffered_5000m"
     arcpy.Buffer_analysis("Subregion", subregion_buffer, "5000 meters")
     arcpy.AddMessage("Buffered subregion.")
 
@@ -182,8 +182,8 @@ def mosaic(in_workspace, nhd_gdb, out_dir, available_ram=4, projection=arcpy.Spa
     approx_size_dir_GB = len(mosaic_rasters) * .5
 
     if approx_size_dir_GB < .5 * int(available_ram):
-        env.workspace = 'memory'
-        memory_msg = ("Attempting to use memory workspace. If you" +
+        env.workspace = 'in_memory'
+        memory_msg = ("Attempting to use in_memory workspace. If you" +
                     " experience problems during the execution of this tool, " +
                     "try running it again with a lower value " +
                     "entered for 'Available RAM'.")

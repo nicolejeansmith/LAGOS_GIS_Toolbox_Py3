@@ -115,7 +115,7 @@ def add_lake_seeds(nhdplus_catseed_raster, nhdplus_gdb, gridcode_table, eligible
         No NHDPlusID field found in eligible_lakes_fc. Please supply optional nhdplus_waterbody_fc argument using
         the NHDWaterbody feature class for the NHDPlus-HR HUC4 you are trying to process.''')
 
-    arcpy.env.workspace = 'memory'
+    arcpy.env.workspace = 'in_memory'
     arcpy.env.scratchWorkspace = os.path.dirname(output_raster)
     # essential environment settings for conversion to raster
     arcpy.env.snapRaster = nhdplus_catseed_raster
@@ -194,7 +194,7 @@ def revise_hydrodem(nhdplus_gdb, hydrodem_raster, filldepth_raster, lagos_catsee
         arcpy.env.workspace = temp_gdb
     else:
         temp_gdb = ''
-        arcpy.env.workspace = 'memory'
+        arcpy.env.workspace = 'in_memory'
 
     # per suggestion by Price here
     # https://community.esri.com/people/curtvprice/blog/2017/03/03/temporary-rasters-in-arcpy
@@ -313,7 +313,7 @@ def delineate_catchments(flowdir_raster, catseed_raster, nhdplus_gdb, gridcode_t
     """
     # establish environments
     arcpy.CheckOutExtension('Spatial')
-    arcpy.env.workspace = 'memory'
+    arcpy.env.workspace = 'in_memory'
     arcpy.env.snapRaster = flowdir_raster
     arcpy.env.extent = flowdir_raster
     nhd_network = NHDNetwork(nhdplus_gdb)

@@ -8,7 +8,7 @@ from arcpy.sa import *
 arcpy.CheckOutExtension("Spatial")
 
 # Environmental settings:
-mem = "memory"
+mem = "in_memory"
 albers = arcpy.SpatialReference()
 albers.factoryCode = 102039
 albers.create()

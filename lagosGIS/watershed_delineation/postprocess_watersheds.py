@@ -70,7 +70,7 @@ def calc_watershed_subtype(nhd_gdb, interlake_fc, fits_naming_standard=True):
     matching_ids = list(gdb_wb_permids.intersection(eligible_lake_ids))
 
     matching_ids_query = '{} IN ({})'.format(permid, ','.join(['\'{}\''.format(id) for id in matching_ids]))
-    interlake_fc_mem = arcpy.Select_analysis(interlake_fc, 'memory/interlake_fc', matching_ids_query)
+    interlake_fc_mem = arcpy.Select_analysis(interlake_fc, 'in_memory/interlake_fc', matching_ids_query)
 
     # Pick up watershed equality flag indicating whether network watershed and "interlake" watershed were equal
     print('Reading equality flag...')
@@ -113,7 +113,7 @@ def calc_watershed_subtype(nhd_gdb, interlake_fc, fits_naming_standard=True):
             u_cursor.updateRow(row)
 
     # cleanup
-    DM.Delete('memory/interlake_fc')
+    DM.Delete('in_memory/interlake_fc')
     return (subtype_results)
 
 # # Not called anymore! Referenced in doc for preliminary work leading to sliver flag rules.
@@ -256,10 +256,10 @@ def process_ws(sheds_fc, zone_name, network_fc ='', nhd_gdb='', fits_naming_stan
 
     # percent in USA
     arcpy.AddMessage("Percent in USA...")
-    arcpy.TabulateIntersection_analysis(sheds_fc, zoneid, STATES_GEO, 'memory/tabarea')
+    arcpy.TabulateIntersection_analysis(sheds_fc, zoneid, STATES_GEO, 'in_memory/tabarea')
     # round to 2 digits and don't let values exceed 100
     inusa_dict = {r[0]:min(round(r[1],2), 100)
-                  for r in arcpy.da.SearchCursor('memory/tabarea', [zoneid, 'PERCENTAGE'])}
+                  for r in arcpy.da.SearchCursor('in_memory/tabarea', [zoneid, 'PERCENTAGE'])}
 
     with arcpy.da.UpdateCursor(sheds_fc, [zoneid, inusa_pct]) as u_cursor:
         for row in u_cursor:
@@ -284,13 +284,13 @@ def process_ws(sheds_fc, zone_name, network_fc ='', nhd_gdb='', fits_naming_stan
 
     # mbgconhull metrics
     print('Adding convex hull metrics...')
-    DM.MinimumBoundingGeometry(sheds_fc, 'memory/mbg', 'CONVEX_HULL', mbg_fields_option='MBG_FIELDS')
+    DM.MinimumBoundingGeometry(sheds_fc, 'in_memory/mbg', 'CONVEX_HULL', mbg_fields_option='MBG_FIELDS')
     mbg_dict_fields = ['lagoslakeid',
                        'MBG_Length',
                        'MBG_Width',
                        'MBG_Orientation'
                        ]
-    mbg_dict = {r[0]:r[1:] for r in arcpy.da.SearchCursor('memory/mbg', mbg_dict_fields)}
+    mbg_dict = {r[0]:r[1:] for r in arcpy.da.SearchCursor('in_memory/mbg', mbg_dict_fields)}
     mbg_fields = ['lagoslakeid',
                   mbgconhull_length_m,
                   mbgconhull_width_m,
@@ -357,7 +357,7 @@ def process_ws(sheds_fc, zone_name, network_fc ='', nhd_gdb='', fits_naming_stan
     lyr_objects = [lyr_object for var_name, lyr_object in locals().items() if var_name.endswith('lyr')]
     for l in lyr_objects:
         DM.Delete(l)
-    DM.Delete('memory/tabarea')
-    DM.Delete('memory/mbg')
+    DM.Delete('in_memory/tabarea')
+    DM.Delete('in_memory/mbg')
 
     return sheds_fc

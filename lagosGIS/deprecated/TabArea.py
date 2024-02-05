@@ -22,7 +22,7 @@ def tabarea(fc):
     import arcpy
     name = os.path.splitext(os.path.basename(fc))[0]
     inraster = Raster[raster]
-    mem = "memory"
+    mem = "in_memory"
     tatable = TabulateArea(fc, "FID", inraster, "Value", os.path.join(mem, name + "areas"))
     arcpy.Copy_management(tatable, os.path.join(outfolder, name + ".dbf"))
     arcpy.Delete_management(os.path.join(mem, name + "areas"))

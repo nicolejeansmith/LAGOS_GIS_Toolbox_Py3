@@ -117,7 +117,7 @@ def georeference_lake_sites(sample_sites_point_fc, out_fc, site_id_field,
     state = state.upper()
     if state not in STATES:
         raise ValueError('Use the 2-letter state code abbreviation')
-    arcpy.env.workspace = 'memory'
+    arcpy.env.workspace = 'in_memory'
     out_short = os.path.splitext(os.path.basename(out_fc))[0]
     join1 = '{}_1'.format(out_short)
     join2 = '{}_2'.format(out_short)
@@ -322,6 +322,6 @@ def georeference_lake_sites(sample_sites_point_fc, out_fc, site_id_field,
 
     # Cleanup
     DM.AddField(out_fc, 'Note', 'TEXT', field_length=140)
-    DM.Delete('memory')
+    DM.Delete('in_memory')
 
     return out_fc

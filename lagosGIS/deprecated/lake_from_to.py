@@ -21,7 +21,7 @@ def lake_from_to(nhd_subregion_gdb, output_table):
     :return:
     """
 
-    arcpy.env.workspace = 'memory'
+    arcpy.env.workspace = 'in_memory'
     waterbody0 = os.path.join(nhd_subregion_gdb, 'NHDWaterbody')
     network = os.path.join(nhd_subregion_gdb, 'Hydrography','HYDRO_NET')
     junctions0 = os.path.join(nhd_subregion_gdb, 'HYDRO_NET_Junctions')
@@ -97,7 +97,7 @@ def lake_from_to(nhd_subregion_gdb, output_table):
         insert_cursor.insertRow([result['FROM'], result['TO']])
 
     # delete everything
-    for item in [waterbody, junctions, junctions_1ha, 'memory']:
+    for item in [waterbody, junctions, junctions_1ha, 'in_memory']:
         DM.Delete(item)
     arcpy.AddMessage("Completed.")
 
